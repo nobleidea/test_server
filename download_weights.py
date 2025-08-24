@@ -1,10 +1,19 @@
 from diffusers import FluxKontextPipeline
 import torch
+import os
 
 def fetch_pretrained_model(model_name, **kwargs):
     """
     Fetches a pretrained model from the HuggingFace model hub.
     """
+    # Get HF token from environment variable
+    token = os.environ.get("HF_TOKEN")
+    if token:
+        kwargs["token"] = token
+        print(f"Using HF token for authentication (token: {token[:8]}...)")
+    else:
+        print("No HF_TOKEN found in environment variables")
+    
     max_retries = 3
     for attempt in range(max_retries):
         try:
