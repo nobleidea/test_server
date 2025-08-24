@@ -31,17 +31,10 @@ COPY download_weights.py schemas.py handler.py test_input.json /
 
 # ARG for HF token - only available during build
 ARG HF_TOKEN
+ENV HF_TOKEN=${HF_TOKEN}
 
 # download the weights from hugging face
-# Use the token during download, then unset it
-RUN if [ -n "$HF_TOKEN" ]; then \
-        export HF_TOKEN=$HF_TOKEN && \
-        python3 /download_weights.py && \
-        unset HF_TOKEN; \
-    else \
-        echo "Warning: No HF_TOKEN provided. Attempting download without authentication..." && \
-        python3 /download_weights.py; \
-    fi
+RUN python3 /download_weights.py
 
 # run the handler
 CMD python3 -u /handler.py
