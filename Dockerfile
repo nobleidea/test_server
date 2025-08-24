@@ -31,10 +31,9 @@ COPY download_weights.py schemas.py handler.py test_input.json /
 
 # ARG for HF token - only available during build
 ARG HF_TOKEN
-ENV HF_TOKEN=${HF_TOKEN}
 
 # download the weights from hugging face
-RUN python3 /download_weights.py
+RUN HF_TOKEN=${HF_TOKEN} python3 /download_weights.py
 
 # run the handler
 CMD python3 -u /handler.py
